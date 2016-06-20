@@ -27,7 +27,7 @@ import in.srain.cube.views.ptr.PtrHandler;
  * 作者：chs on 2016/6/4 17:36
  * 邮箱：657083984@qq.com
  */
-public class PruToRefreshActivity extends AppCompatActivity{
+public class PruToRefreshActivity extends AppCompatActivity {
     @Bind(R.id.recycle_view)
     LoadMoreRecyclerView mRecyclerView;
     @Bind(R.id.material_style_ptr_frame)
@@ -35,17 +35,18 @@ public class PruToRefreshActivity extends AppCompatActivity{
     private List<String> mData = new ArrayList<>();
     private CommonAdapter mAdapter;
     private int currentPage = 1;
-    private  Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             currentPage++;
-            if(msg.what==1){
+            if (msg.what == 1) {
                 mPtrFrame.refreshComplete();
                 mAdapter.notifyDataSetChanged();
             }
         }
     };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,16 +61,16 @@ public class PruToRefreshActivity extends AppCompatActivity{
             @Override
             public void onLoadMore() {
                 mAdapter.updateShowDialog(1);
-               initData();
+                initData();
             }
         });
     }
 
     private void initView() {
-        mAdapter = new CommonAdapter<String>(this,R.layout.item_recycleview,mData,mRecyclerView) {
+        mAdapter = new CommonAdapter<String>(this, R.layout.item_recycleview, mData, mRecyclerView) {
             @Override
             public void convert(ViewHolder holder, String str) {
-             holder.setText(R.id.tv_text,str);
+                holder.setText(R.id.tv_text, str);
             }
         };
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -81,7 +82,7 @@ public class PruToRefreshActivity extends AppCompatActivity{
     }
 
     private void initData() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 try {
@@ -89,13 +90,14 @@ public class PruToRefreshActivity extends AppCompatActivity{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                for(int i=0;i<20;i++){
-                    mData.add("item>>>>>>>"+i*currentPage);
+                for (int i = 0; i < 20; i++) {
+                    mData.add("item>>>>>>>" + i * currentPage);
                 }
                 mHandler.sendEmptyMessage(1);
             }
         }.start();
     }
+
     private void initPtr() {
         mPtrFrame.setPtrHandler(new PtrHandler() {
             @Override

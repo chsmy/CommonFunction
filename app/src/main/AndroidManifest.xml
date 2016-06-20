@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".prutorefresh.PruToRefreshActivity"/>
+        <activity android:name=".tabselector.top.TopSelectorActivity"/>
     </application>
 
 </manifest>

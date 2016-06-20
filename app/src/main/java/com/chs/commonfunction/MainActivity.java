@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.chs.commonfunction.prutorefresh.PruToRefreshActivity;
+import com.chs.commonfunction.tabselector.top.TopSelectorActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -18,12 +19,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.pru_to_refresh})
+    @OnClick({R.id.pru_to_refresh,R.id.tab_select})
     public void onClick(View view){
         Intent intent;
         switch (view.getId()){
             case R.id.pru_to_refresh:
                 intent = new Intent(this, PruToRefreshActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.tab_select:
+                intent = new Intent(this, TopSelectorActivity.class);
                 startActivity(intent);
                 break;
         }
