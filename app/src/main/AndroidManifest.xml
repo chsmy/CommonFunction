@@ -19,6 +19,7 @@
         <activity android:name=".tabselector.top.TopSelectorActivity"/>
         <activity android:name=".camera.CameraActivity"/>
         <activity android:name=".popupwindow.PopActivity"/>
+        <activity android:name=".camera.WebCameraActivity"/>
     </application>
 
 </manifest>

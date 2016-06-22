@@ -1,9 +1,10 @@
 package com.chs.commonfunction.camera;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -11,25 +12,36 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chs.commonfunction.R;
 import com.chs.commonfunction.utils.FileUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CameraActivity extends Activity {
+/**
+ * 从webview中调用系统拍照和相册
+ *
+ * 由于没有web界面  这里看不到效果  代码测试有效
+ */
+public class WebCameraActivity extends Activity {
 
 	private Uri uritempFile;
 	private final int REQUESTCODE_TAKE = 1;
@@ -38,20 +50,78 @@ public class CameraActivity extends Activity {
 	private String headPath = "";
 	@Bind(R.id.rl_main)
 	RelativeLayout rl_main;
+	@Bind(R.id.webview)
+	WebView webView;
+	@Bind(R.id.progressBar)
+	ProgressBar progressBar;
+	private ValueCallback<Uri> mUploadFile;
+	private ValueCallback<Uri[]> mUploadCallbackAboveL;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_camera);
+		setContentView(R.layout.activity_web_camera);
 		ButterKnife.bind(this);
-		findViewById(R.id.take_picture).setOnClickListener(new View.OnClickListener() {
+		initView();
+	}
+
+	private void initView() {
+		progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+		webView.getSettings().setAllowFileAccess(true);
+		webView.getSettings().setDefaultTextEncodingName("UTF-8");
+		webView.getSettings().setLoadWithOverviewMode(true);
+		webView.getSettings().setUseWideViewPort(true);
+		String url = getIntent().getStringExtra("url");
+		webView.loadUrl(url);
+		webView.setWebViewClient(new WebViewClient() {
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				view.loadUrl(url);
+				return true;
+			}
+
 			@Override
-			public void onClick(View v) {
-				new TakePhotoPop(CameraActivity.this,rl_main);
+			public void onPageFinished(WebView view, String url) {
+				super.onPageFinished(view, url);
+				progressBar.setVisibility(View.GONE);
+			}
+		});
+		webView.setWebChromeClient(new WebChromeClient()
+		{
+			//5.0以上
+			@Override
+			@SuppressLint("NewApi")
+			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+				if (mUploadCallbackAboveL != null) {
+					mUploadCallbackAboveL.onReceiveValue(null);
+				}
+				mUploadCallbackAboveL = filePathCallback;
+				new TakePhotoPop(WebCameraActivity.this, rl_main);
+				return true;
+			}
+			// Andorid 4.1+
+			public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType, String capture)
+			{
+				openFileChooser(uploadFile,acceptType);
+			}
+
+			// Andorid 3.0 +
+			public void openFileChooser(ValueCallback<Uri> uploadFile, String acceptType)
+			{
+				mUploadFile = uploadFile;
+				new TakePhotoPop(WebCameraActivity.this, rl_main);
+			}
+
+			// Android 3.0
+			public void openFileChooser(ValueCallback<Uri> uploadFile)
+			{
+				openFileChooser(uploadFile,"");
 			}
 		});
 	}
 
-	 @Override
+	@Override
 	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 switch (requestCode) {
 			 case REQUESTCODE_TAKE:// 调用相机拍照
@@ -198,9 +268,25 @@ public class CameraActivity extends Activity {
 	public void postFile(String path) throws Exception {
 		File file = new File(path);
 		if (file.exists() && file.length() > 0) {
-        //开始上传
+			Uri uri = Uri.fromFile(file);
+			if(mUploadFile!=null){
+				mUploadFile.onReceiveValue(uri);
+				mUploadFile = null;
+			}
+			if(mUploadCallbackAboveL!=null){
+				mUploadCallbackAboveL.onReceiveValue(new Uri[]{uri});
+				mUploadCallbackAboveL = null;
+			}
 		} else {
-			Log.i("tag", "no file");
+			Log.i("TAG", "no file");
 		}
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+			webView.goBack();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

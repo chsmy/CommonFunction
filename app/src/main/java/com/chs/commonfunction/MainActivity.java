@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.chs.commonfunction.camera.CameraActivity;
+import com.chs.commonfunction.camera.WebCameraActivity;
 import com.chs.commonfunction.popupwindow.PopActivity;
 import com.chs.commonfunction.prutorefresh.PruToRefreshActivity;
 import com.chs.commonfunction.tabselector.top.TopSelectorActivity;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.pop})
+    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop})
     public void onClick(View view){
         Intent intent;
         switch (view.getId()){
@@ -35,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.camera:
                 intent = new Intent(this, CameraActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.web_camera:
+                intent = new Intent(this, WebCameraActivity.class);
                 startActivity(intent);
                 break;
             case R.id.pop:

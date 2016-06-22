@@ -29,10 +29,18 @@
         android:layout_marginLeft="10dp"
         android:text="相机" />
     <Button
-        android:id="@+id/pop"
+        android:id="@+id/web_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_below="@id/pru_to_refresh"
+        android:text="从网页中调用相机" />
+    <Button
+        android:id="@+id/pop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/web_camera"
+        android:layout_alignTop="@id/web_camera"
         android:text="pop" />
 </RelativeLayout>
