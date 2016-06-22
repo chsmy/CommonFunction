@@ -21,4 +21,18 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="Tab选择器" />
+    <Button
+        android:id="@+id/camera"
+        android:layout_toRightOf="@id/tab_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="相机" />
+    <Button
+        android:id="@+id/pop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/pru_to_refresh"
+        android:text="pop" />
 </RelativeLayout>

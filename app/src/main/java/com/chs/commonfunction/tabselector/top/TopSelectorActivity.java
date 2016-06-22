@@ -56,8 +56,7 @@ public class TopSelectorActivity extends AppCompatActivity implements ViewPager.
         int mCurrentPosition = 0;
         viewPager.setCurrentItem(mCurrentPosition);
         mSlidingTabLayout.setCustomTabView(R.layout.comm_lay_tab_indicator, android.R.id.text1);
-        Resources res = getResources();
-//        mSlidingTabLayout.setSelectedIndicatorColors(res.getColor(R.color.comm_tab_selected_strip));
+        mSlidingTabLayout.setSelectedIndicatorColors(getResources().getColor(R.color.comm_tab_selected_strip));
         mSlidingTabLayout.setDistributeEvenly(isDistributeEvenly());
         mSlidingTabLayout.setViewPager(viewPager);
         mSlidingTabLayout.setOnPageChangeListener(this);

@@ -17,6 +17,8 @@
         </activity>
         <activity android:name=".prutorefresh.PruToRefreshActivity"/>
         <activity android:name=".tabselector.top.TopSelectorActivity"/>
+        <activity android:name=".camera.CameraActivity"/>
+        <activity android:name=".popupwindow.PopActivity"/>
     </application>
 
 </manifest>

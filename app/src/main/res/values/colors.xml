@@ -6,4 +6,9 @@
 
     <color name="green">#74d231</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="stroke">#e2e6e8</color>
+    <!--Tab滑动页-->
+    <color name="comm_tab_selected_strip">#3cafff</color>
 </resources>
