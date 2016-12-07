@@ -4,6 +4,7 @@ import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
 /**
  * A single linked list to wrap PtrUIHandler
+ * 实现 UI 接口 PtrUIHandler，封装了 PtrUIHandler，并将其组织成链表的形式。
  */
 class PtrUIHandlerHolder implements PtrUIHandler {
 

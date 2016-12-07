@@ -13,10 +13,12 @@ import in.srain.cube.views.ptr.util.PtrCLog;
  * This layout view for "Pull to Refresh(Ptr)" support all of the view, you can contain everything you want.
  * support: pull to refresh / release to refresh / auto refresh / keep header view while refreshing / hide header view while refreshing
  * It defines {@link in.srain.cube.views.ptr.PtrUIHandler}, which allows you customize the UI easily.
+ * 有且只能有两个子 View，头部 Header 和内容 Content。通常情况下 Header 会实现 PtrUIHandler 接口， Content 可以为任意的 View。
+ * 通过重写 onFinishInflate， onMeasure， onLayout 来确定控件大小和位置。通过重写 dispatchTouchEvent 来确定控件的下拉行为。
  */
 public class PtrFrameLayout extends ViewGroup {
 
-    // status enum
+    // status enum 状态枚举
     public final static byte PTR_STATUS_INIT = 1;
     private byte mStatus = PTR_STATUS_INIT;
     public final static byte PTR_STATUS_PREPARE = 2;
@@ -26,17 +28,17 @@ public class PtrFrameLayout extends ViewGroup {
     public static boolean DEBUG = false;
     private static int ID = 1;
     protected final String LOG_TAG = "ptr-frame-" + ++ID;
-    // auto refresh status
+    // auto refresh status 自动刷新状态
     private static byte FLAG_AUTO_REFRESH_AT_ONCE = 0x01;
     private static byte FLAG_AUTO_REFRESH_BUT_LATER = 0x01 << 1;
     private static byte FLAG_ENABLE_NEXT_PTR_AT_ONCE = 0x01 << 2;
     private static byte FLAG_PIN_CONTENT = 0x01 << 3;
     private static byte MASK_AUTO_REFRESH = 0x03;
     protected View mContent;
-    // optional config for define header and content in xml file
-    private int mHeaderId = 0;
-    private int mContainerId = 0;
-    // config
+    // optional config for define header and content in xml file 可选配置xml文件定义标题和内容
+    private int mHeaderId = 0; //头部 id
+    private int mContainerId = 0;//内容 id
+    // config 配置
     private int mDurationToClose = 200;
     private int mDurationToCloseHeader = 1000;
     private boolean mKeepHeaderWhenRefresh = true;
@@ -44,14 +46,14 @@ public class PtrFrameLayout extends ViewGroup {
     private View mHeaderView;
     private PtrUIHandlerHolder mPtrUIHandlerHolder = PtrUIHandlerHolder.create();
     private PtrHandler mPtrHandler;
-    // working parameters
+    // working parameters 工作参数
     private ScrollChecker mScrollChecker;
     private int mPagingTouchSlop;
     private int mHeaderHeight;
     private boolean mDisableWhenHorizontalMove = false;
     private int mFlag = 0x00;
 
-    // disable when detect moving horizontally
+    // disable when detect moving horizontally 检测水平移动时禁用
     private boolean mPreventForHorizontal = false;
 
     private MotionEvent mLastMoveEvent;
@@ -84,22 +86,24 @@ public class PtrFrameLayout extends ViewGroup {
 
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.PtrFrameLayout, 0, 0);
         if (arr != null) {
-
+            //头部id
             mHeaderId = arr.getResourceId(R.styleable.PtrFrameLayout_ptr_header, mHeaderId);
+            //内容id
             mContainerId = arr.getResourceId(R.styleable.PtrFrameLayout_ptr_content, mContainerId);
-
+            //设置阻尼参数 阻尼系数，默认: 1.7f，越大，感觉下拉时越吃力。
             mPtrIndicator.setResistance(
                     arr.getFloat(R.styleable.PtrFrameLayout_ptr_resistance, mPtrIndicator.getResistance()));
-
+            //回弹延时，默认 200ms，回弹到刷新高度所用时间。
             mDurationToClose = arr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close, mDurationToClose);
+            //头部回弹时间，默认 1000ms。
             mDurationToCloseHeader = arr.getInt(R.styleable.PtrFrameLayout_ptr_duration_to_close_header, mDurationToCloseHeader);
-
+            //触发刷新时移动的位置比例，默认，1.2f，移动达到头部高度 1.2 倍时可触发刷新操作。
             float ratio = mPtrIndicator.getRatioOfHeaderToHeightRefresh();
             ratio = arr.getFloat(R.styleable.PtrFrameLayout_ptr_ratio_of_header_height_to_refresh, ratio);
             mPtrIndicator.setRatioOfHeaderHeightToRefresh(ratio);
-
+            //下拉刷新 / 释放刷新，默认为释放刷新。
             mKeepHeaderWhenRefresh = arr.getBoolean(R.styleable.PtrFrameLayout_ptr_keep_header_when_refresh, mKeepHeaderWhenRefresh);
-
+            //刷新是否保持头部，默认值 true。
             mPullToRefresh = arr.getBoolean(R.styleable.PtrFrameLayout_ptr_pull_to_fresh, mPullToRefresh);
             arr.recycle();
         }
@@ -113,6 +117,7 @@ public class PtrFrameLayout extends ViewGroup {
     @Override
     protected void onFinishInflate() {
         final int childCount = getChildCount();
+        //有且只有两个子 View
         if (childCount > 2) {
             throw new IllegalStateException("PtrFrameLayout only can host 2 elements");
         } else if (childCount == 2) {
@@ -123,7 +128,7 @@ public class PtrFrameLayout extends ViewGroup {
                 mContent = findViewById(mContainerId);
             }
 
-            // not specify header or content
+            // not specify header or content 没有指定标题或内容
             if (mContent == null || mHeaderView == null) {
 
                 View child1 = getChildAt(0);
@@ -135,12 +140,12 @@ public class PtrFrameLayout extends ViewGroup {
                     mHeaderView = child2;
                     mContent = child1;
                 } else {
-                    // both are not specified
+                    // both are not specified  都是未指定
                     if (mContent == null && mHeaderView == null) {
                         mHeaderView = child1;
                         mContent = child2;
                     }
-                    // only one is specified
+                    // only one is specified  只有一个指定
                     else {
                         if (mHeaderView == null) {
                             mHeaderView = mContent == child1 ? child2 : child1;
@@ -190,14 +195,14 @@ public class PtrFrameLayout extends ViewGroup {
                     getPaddingLeft(), getPaddingRight(), getPaddingTop(), getPaddingBottom());
 
         }
-
+        // 测量 Header
         if (mHeaderView != null) {
             measureChildWithMargins(mHeaderView, widthMeasureSpec, 0, heightMeasureSpec, 0);
             MarginLayoutParams lp = (MarginLayoutParams) mHeaderView.getLayoutParams();
             mHeaderHeight = mHeaderView.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
             mPtrIndicator.setHeaderHeight(mHeaderHeight);
         }
-
+        // 测量 Content
         if (mContent != null) {
             measureContentView(mContent, widthMeasureSpec, heightMeasureSpec);
             if (DEBUG && DEBUG_LAYOUT) {
@@ -375,13 +380,13 @@ public class PtrFrameLayout extends ViewGroup {
 
         boolean isUnderTouch = mPtrIndicator.isUnderTouch();
 
-        // once moved, cancel event will be sent to child
+        // once moved, cancel event will be sent to child  一旦移动 取消向下传递的事件
         if (isUnderTouch && !mHasSendCancelEvent && mPtrIndicator.hasMovedAfterPressedDown()) {
             mHasSendCancelEvent = true;
             sendCancelEvent();
         }
 
-        // leave initiated position or just refresh complete
+        // leave initiated position or just refresh complete 离开开始位置或者刷新完成
         if ((mPtrIndicator.hasJustLeftStartPosition() && mStatus == PTR_STATUS_INIT) ||
                 (mPtrIndicator.goDownCrossFinishPosition() && mStatus == PTR_STATUS_COMPLETE && isEnabledNextPtrAtOnce())) {
 
@@ -404,12 +409,12 @@ public class PtrFrameLayout extends ViewGroup {
 
         // Pull to Refresh
         if (mStatus == PTR_STATUS_PREPARE) {
-            // reach fresh height while moving from top to bottom
+            // reach fresh height while moving from top to bottom  从上往下到达刷新的高度
             if (isUnderTouch && !isAutoRefresh() && mPullToRefresh
                     && mPtrIndicator.crossRefreshLineFromTopToBottom()) {
                 tryToPerformRefresh();
             }
-            // reach header height while auto refresh
+            // reach header height while auto refresh  到达自动刷新的高度
             if (performAutoRefreshButLater() && mPtrIndicator.hasJustReachedHeaderHeightFromTopToBottom()) {
                 tryToPerformRefresh();
             }

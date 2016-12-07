@@ -26,6 +26,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.chs.commonfunction.Const;
+
 class SlidingTabStrip extends LinearLayout {
 
     private static final int DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS = 0;
@@ -124,12 +126,12 @@ class SlidingTabStrip extends LinearLayout {
 
             mSelectedIndicatorPaint.setColor(color);
 
-            canvas.drawRect(left, height - mSelectedIndicatorThickness, right,
-                    height, mSelectedIndicatorPaint);
+//            canvas.drawRect(left, height - mSelectedIndicatorThickness, right,
+//                    height, mSelectedIndicatorPaint);
         }
 
         // Thin underline along the entire bottom edge
-        canvas.drawRect(0, height - mBottomBorderThickness, getWidth(), height, mBottomBorderPaint);
+//        canvas.drawRect(0, height - mBottomBorderThickness, getWidth(), height, mBottomBorderPaint);
     }
 
     /**
@@ -163,6 +165,18 @@ class SlidingTabStrip extends LinearLayout {
 
         void setIndicatorColors(int... colors) {
             mIndicatorColors = colors;
+        }
+    }
+
+    public void resetColor(){
+        int count = getChildCount();
+        for(int i = 0;i<count;i++){
+            View view = getChildAt(i);
+            view.setBackgroundColor(getResources().getColor(Const.colors[i]));
+            if(i<count-1){
+                View viewNext = getChildAt(i+1);
+                ((LinearLayout)viewNext).getChildAt(0).setBackgroundResource(com.chs.commonfunction.R.drawable.check_selector1);
+            }
         }
     }
 }

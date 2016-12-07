@@ -11,10 +11,11 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
 public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler {
 
@@ -123,14 +124,14 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         mRotateView.clearAnimation();
         mRotateView.setVisibility(INVISIBLE);
     }
-
+    //重置 View，隐藏忙碌进度条，隐藏箭头 View，更新最后刷新时间。
     @Override
     public void onUIReset(PtrFrameLayout frame) {
         resetView();
         mShouldShowLastUpdate = true;
         tryUpdateLastUpdateTime();
     }
-
+    //准备刷新，隐藏忙碌进度条，显示箭头 View，显示文字，如果是下拉刷新，显示“下拉刷新”，如果是释放刷新，显示“下拉”。
     @Override
     public void onUIRefreshPrepare(PtrFrameLayout frame) {
 
@@ -148,7 +149,7 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
             mTitleTextView.setText(getResources().getString(R.string.cube_ptr_pull_down));
         }
     }
-
+    //开始刷新，隐藏箭头 View，显示忙碌进度条，显示文字，显示“加载中...”，更新最后刷新时间。
     @Override
     public void onUIRefreshBegin(PtrFrameLayout frame) {
         mShouldShowLastUpdate = false;
@@ -160,7 +161,7 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         tryUpdateLastUpdateTime();
         mLastUpdateTimeUpdater.stop();
     }
-
+    //刷新结束，隐藏箭头 View，隐藏忙碌进度条，显示文字，显示“更新完成”，写入最后刷新时间。
     @Override
     public void onUIRefreshComplete(PtrFrameLayout frame) {
 
