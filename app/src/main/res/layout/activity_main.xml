@@ -43,4 +43,13 @@
         android:layout_toRightOf="@id/web_camera"
         android:layout_alignTop="@id/web_camera"
         android:text="pop" />
+    <Button
+        android:id="@+id/coordinatorlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/pop"
+        android:layout_alignTop="@id/pop"
+        android:textAllCaps="false"
+        android:text="coordinatorlayout" />
 </RelativeLayout>

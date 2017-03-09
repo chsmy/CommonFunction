@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.chs.commonfunction">
+          package="com.chs.commonfunction">
 
     <application
         android:allowBackup="true"
@@ -10,9 +10,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".prutorefresh.PruToRefreshActivity"/>
@@ -21,6 +21,16 @@
         <activity android:name=".popupwindow.PopActivity"/>
         <activity android:name=".camera.WebCameraActivity"/>
         <activity android:name=".tabselector.top.TopbgActivity"/>
+        <activity android:name=".coordinatorlayout.CoordinatorlayoutActivity">
+        </activity>
+        <activity android:name=".coordinatorlayout.FirstActivity">
+        </activity>
+        <activity android:name=".coordinatorlayout.SecondActivity">
+        </activity>
+        <activity android:name=".coordinatorlayout.ThirdActivity">
+        </activity>
+        <activity android:name=".coordinatorlayout.FourActivity">
+        </activity>
     </application>
 
 </manifest>

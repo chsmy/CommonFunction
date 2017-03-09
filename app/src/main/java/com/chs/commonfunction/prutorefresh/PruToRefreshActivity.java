@@ -6,8 +6,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.chs.commonfunction.R;
@@ -115,7 +113,7 @@ public class PruToRefreshActivity extends AppCompatActivity {
         mPtrFrame.setResistance(1.7f);
         mPtrFrame.setRatioOfHeaderHeightToRefresh(1.2f);
         mPtrFrame.setDurationToClose(200);
-        mPtrFrame.setDurationToCloseHeader(1000);
+        mPtrFrame.setDurationToCloseHeader(500);
         // default is false
         mPtrFrame.setPullToRefresh(false);
         // default is true

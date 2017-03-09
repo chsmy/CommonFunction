@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.chs.commonfunction.camera.CameraActivity;
 import com.chs.commonfunction.camera.WebCameraActivity;
+import com.chs.commonfunction.coordinatorlayout.CoordinatorlayoutActivity;
 import com.chs.commonfunction.popupwindow.PopActivity;
 import com.chs.commonfunction.prutorefresh.PruToRefreshActivity;
 import com.chs.commonfunction.tabselector.top.TopSelectorActivity;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop})
+    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop,R.id.coordinatorlayout})
     public void onClick(View view){
         Intent intent;
         switch (view.getId()){
@@ -44,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.pop:
                 intent = new Intent(this, PopActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.coordinatorlayout:
+                intent = new Intent(this, CoordinatorlayoutActivity.class);
                 startActivity(intent);
                 break;
         }
