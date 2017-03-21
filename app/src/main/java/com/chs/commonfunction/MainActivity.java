@@ -11,6 +11,8 @@ import com.chs.commonfunction.coordinatorlayout.CoordinatorlayoutActivity;
 import com.chs.commonfunction.popupwindow.PopActivity;
 import com.chs.commonfunction.prutorefresh.PruToRefreshActivity;
 import com.chs.commonfunction.recyclerview.RecycleActivity;
+import com.chs.commonfunction.recyclerview.RecycleGridLayoutActivity;
+import com.chs.commonfunction.recyclerview.RecycleStaggeredGridLayoutActivity;
 import com.chs.commonfunction.tabselector.top.TopSelectorActivity;
 
 import butterknife.ButterKnife;
@@ -24,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop,R.id.coordinatorlayout,R.id.recycle_view})
+    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop,R.id.coordinatorlayout,R.id.recycle_view
+    ,R.id.recycle_view1,R.id.recycle_view2})
     public void onClick(View view){
         Intent intent;
         switch (view.getId()){
@@ -54,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.recycle_view:
                 intent = new Intent(this, RecycleActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.recycle_view1:
+                intent = new Intent(this, RecycleGridLayoutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.recycle_view2:
+                intent = new Intent(this, RecycleStaggeredGridLayoutActivity.class);
                 startActivity(intent);
                 break;
         }
