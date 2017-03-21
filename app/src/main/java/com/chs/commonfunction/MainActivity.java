@@ -10,6 +10,7 @@ import com.chs.commonfunction.camera.WebCameraActivity;
 import com.chs.commonfunction.coordinatorlayout.CoordinatorlayoutActivity;
 import com.chs.commonfunction.popupwindow.PopActivity;
 import com.chs.commonfunction.prutorefresh.PruToRefreshActivity;
+import com.chs.commonfunction.recyclerview.RecycleActivity;
 import com.chs.commonfunction.tabselector.top.TopSelectorActivity;
 
 import butterknife.ButterKnife;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop,R.id.coordinatorlayout})
+    @OnClick({R.id.pru_to_refresh,R.id.tab_select,R.id.camera,R.id.web_camera,R.id.pop,R.id.coordinatorlayout,R.id.recycle_view})
     public void onClick(View view){
         Intent intent;
         switch (view.getId()){
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.coordinatorlayout:
                 intent = new Intent(this, CoordinatorlayoutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.recycle_view:
+                intent = new Intent(this, RecycleActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -15,4 +15,7 @@
     <color name="stroke">#e2e6e8</color>
     <!--Tab滑动页-->
     <color name="comm_tab_selected_strip">#3cafff</color>
+
+    <color name="color_ff">#F0F0F0</color>
+    <color name="color_00">#8A000000</color>
 </resources>

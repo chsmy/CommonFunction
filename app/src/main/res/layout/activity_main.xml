@@ -52,4 +52,11 @@
         android:layout_alignTop="@id/pop"
         android:textAllCaps="false"
         android:text="coordinatorlayout" />
+    <Button
+        android:id="@+id/recycle_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/web_camera"
+        android:textAllCaps="false"
+        android:text="recycleview" />
 </RelativeLayout>

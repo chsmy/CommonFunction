@@ -4,7 +4,7 @@
 ### 一、<br/>
 添加了 上拉刷新和滑倒底部加载更多。其中下拉刷新使用了
 [android-Ultra-Pull-To-Refresh ](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh) 可以对任何View进行下拉刷新
-滑倒底部加载更过使用自定义的RecycleView ，以后RecycleView肯定代替ListView等所以只写RecycleView。
+滑倒底部加载更过使用自定义的RecycleView。
     
 ### 二、    
 顶部的Tab导航。
@@ -15,3 +15,7 @@
 
 ### 四、
 Coordinatorlayout的使用
+
+### 五
+参考 https://github.com/cundong/HeaderAndFooterRecyclerView 感谢作者
+增加recycleview 下拉刷新滑倒底部加载更多 增加头部
