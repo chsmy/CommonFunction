@@ -83,6 +83,7 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
 
         this.mInnerAdapter = adapter;
+        //注册一个新的观察者来监听数据的变化
         mInnerAdapter.registerAdapterDataObserver(mDataObserver);
         notifyItemRangeInserted(getHeaderViewsCount(), mInnerAdapter.getItemCount());
     }
